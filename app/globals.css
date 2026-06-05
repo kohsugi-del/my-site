@@ -1,26 +1,307 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==============================
+   Base
+============================== */
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  color: #ffffff;
+  background:
+    radial-gradient(1200px 600px at 0% 0%, rgba(59,130,246,0.35), transparent 55%),
+    radial-gradient(900px 600px at 80% 40%, rgba(99,102,241,0.25), transparent 60%),
+    linear-gradient(180deg, #0b1020, #05070f 65%);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ==============================
+   Noise overlay
+============================== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* ==============================
+   Utility
+============================== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==============================
+   Glass UI
+============================== */
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.14),
+    rgba(255,255,255,0.04)
+  );
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glow {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 30px 80px rgba(0,0,0,0.8),
+    0 0 120px rgba(59,130,246,0.35);
+}
+
+/* ==============================
+   Buttons
+============================== */
+.btn-primary {
+  background: #38bdf8;
+  color: #020617;
+  padding: 14px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-outline {
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* ==============================
+   Header
+============================== */
+.header {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  background: rgba(5, 7, 15, 0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header nav {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+}
+
+.header a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+}
+
+/* ==============================
+   Hero
+============================== */
+.hero {
+  position: relative;
+  padding-top: 80px; /* header分 */
+  overflow: hidden;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  padding: 120px 0 140px;
+}
+
+.hero-earth {
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 520px;
+  opacity: 0.9;
+  pointer-events: none;
+  filter: drop-shadow(0 0 80px rgba(56,189,248,0.45));
+  transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* モバイル：背景化 */
+@media (max-width: 900px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    padding: 100px 0 120px;
+  }
+
+  .hero-earth {
+    position: absolute;
+    inset: auto 50% 20% auto;
+    transform: translateX(50%);
+    width: 360px;
+    opacity: 0.25;
+    filter: blur(8px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes float {
+  0% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-52%) translateX(-6px); }
+  100% { transform: translateY(-50%) translateX(0); }
+}
+
+.hero-earth {
+  animation: float 12s ease-in-out infinite;
+}
+
+.flow {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: flowIn 1s ease forwards;
+  animation-delay: 0.6s;
+}
+
+@keyframes flowIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Flow UI */
+.flow-box {
+  position: relative;
+  padding: 20px 20px 20px 40px;
+  border-radius: 12px;
+  width: 320px;
+}
+
+.flow-item {
+  position: relative;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* SVG lines */
+.flow-lines {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  height: calc(100% - 32px);
+}
+
+.nav-desktop {
+  display: flex;
+  gap: 24px;
+}
+
+.cta {
+  color: #38bdf8;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+}
+
+.hamburger span {
+  width: 20px;
+  height: 2px;
+  background: white;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .nav-desktop {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,7,15,.96);
+    backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    z-index: 40;
+  }
+
+  .mobile-menu a {
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+  }
+}
+
+
+/* Flow hover highlight */
+.flow-item {
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.flow-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(56,189,248,0.18),
+    rgba(56,189,248,0.05)
+  );
+  transform: translateX(4px);
+  box-shadow:
+    0 0 0 1px rgba(56,189,248,0.25),
+    0 0 30px rgba(56,189,248,0.25);
+}
+
+@media (max-width: 900px) {
+  .flow-box {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 16px;
+    width: 100%;
+  }
+
+  .flow-item {
+    min-width: 220px;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  /* 縦ラインは非表示 */
+  .flow-lines {
+    display: none;
+  }
 }
